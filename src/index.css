@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-gray-800 antialiased;
+  }
+}
+
+/* PDF export styling */
+#sow-document {
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+#sow-document h1,
+#sow-document h2,
+#sow-document h3 {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  #sow-document section {
+    page-break-inside: avoid;
+  }
+}
