@@ -1,0 +1,9 @@
+{
+  "name": "SOW Generator",
+  "description": "A mobile-first SOW Generator for real estate investors and project managers. Walk through properties on your phone to capture line items and photos, then access everything on your computer for final review. Features AI-powered categorization, automated quantity calculations, and professional PDF/CSV exports.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

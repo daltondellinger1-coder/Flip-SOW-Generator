@@ -1,13 +1,141 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flip SOW Generator</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
-  <body class="bg-gray-50 min-h-screen">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>SOW Generator</title>
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#020554" />
+    
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="SOW Gen" />
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1086/1086581.png" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': '#A67D00', // Official Gold: Pantone 118 C
+              'brand-secondary': '#020554', // Official Navy: Pantone 2768 C
+              'base-100': '#1f2937', // gray-800 (Keep dark theme base)
+              'base-200': '#374151', // gray-700
+              'base-300': '#4b5563', // gray-600
+              'content': '#d1d5db', // gray-300
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      @media print {
+        @page {
+          margin: 0.5in;
+          size: auto; 
+        }
+
+        /* Fix scrolling containers getting cut off */
+        html, body, #root, #app-container, main {
+          background-color: white !important;
+          color: black !important;
+          height: auto !important;
+          min-height: 0 !important;
+          overflow: visible !important;
+          width: 100% !important;
+          position: static !important;
+          display: block !important; /* Disable flex layout on main wrappers */
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        /* Hide UI Elements */
+        .no-print, header button, .fab-button {
+          display: none !important;
+        }
+
+        /* Show Print Only Elements */
+        .print-only {
+          display: block !important;
+        }
+
+        /* Reset Dark Theme containers to white for print */
+        .bg-base-100, .bg-base-200, .bg-base-300, .bg-black {
+          background-color: white !important;
+          color: black !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
+
+        /* Add borders to cards for separation on white paper */
+        .rounded-lg, .shadow-md, .shadow-lg {
+          border: 1px solid #ccc !important;
+          border-radius: 4px !important;
+          box-shadow: none !important;
+          margin-bottom: 1em !important;
+          page-break-inside: avoid;
+        }
+
+        /* Text Colors */
+        .text-white, .text-gray-200, .text-gray-300, .text-gray-400, .text-content {
+          color: black !important;
+        }
+        
+        /* Ensure Brand Primary is readable or converted to black/dark gray */
+        .text-brand-primary {
+          color: #000 !important;
+          font-weight: bold !important;
+        }
+
+        /* Tables */
+        table {
+          width: 100% !important;
+          border-collapse: collapse !important;
+        }
+        th, td {
+          border: 1px solid #ddd !important;
+          padding: 8px !important;
+          text-align: left !important;
+        }
+        thead {
+          display: table-header-group;
+        }
+        tr {
+          page-break-inside: avoid;
+        }
+
+        /* Page Breaks */
+        .page-break {
+          page-break-before: always;
+        }
+      }
+      
+      /* Hide Print Only elements on screen */
+      .print-only {
+        display: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.28.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "dexie": "https://aistudiocdn.com/dexie@^4.2.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-base-100 text-content">
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
