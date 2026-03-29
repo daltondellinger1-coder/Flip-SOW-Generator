@@ -137,14 +137,26 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({ user, onSelectProje
     setLoadingIntel(prev => ({ ...prev, [project.id!]: false }));
   };
 
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newProjectName && newProjectAddress) {
-        const id = await db.createProject(newProjectName, newProjectAddress, user.email);
-        setIsCreating(false);
-        setNewProjectName('');
-        setNewProjectAddress('');
-        onSelectProject(id as number);
+        setCreateError(null);
+        setIsSubmitting(true);
+        try {
+            const id = await db.createProject(newProjectName, newProjectAddress, user.email);
+            setIsCreating(false);
+            setNewProjectName('');
+            setNewProjectAddress('');
+            onSelectProject(id as number);
+        } catch (err: any) {
+            console.error("Failed to create project:", err);
+            setCreateError(err.message || "Failed to create project. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     }
   };
 
@@ -257,9 +269,17 @@ const ProjectDashboard: React.FC<ProjectDashboardProps> = ({ user, onSelectProje
                             onChange={e => setNewProjectAddress(e.target.value)}
                             required
                         />
+                        {createError && (
+                            <div className="md:col-span-2 bg-red-500/20 border border-red-500 text-red-300 px-4 py-2 rounded text-sm">
+                                {createError}
+                            </div>
+                        )}
                         <div className="md:col-span-2 flex gap-3 justify-end mt-2">
-                            <button type="button" onClick={() => setIsCreating(false)} className="px-4 py-2 rounded text-gray-400 hover:text-white">Cancel</button>
-                            <button type="submit" className="bg-brand-primary px-6 py-2 rounded text-white font-bold hover:bg-brand-secondary">Create Project</button>
+                            <button type="button" onClick={() => { setIsCreating(false); setCreateError(null); }} className="px-4 py-2 rounded text-gray-400 hover:text-white">Cancel</button>
+                            <button type="submit" disabled={isSubmitting} className="bg-brand-primary px-6 py-2 rounded text-white font-bold hover:bg-brand-secondary disabled:opacity-50 flex items-center gap-2">
+                                {isSubmitting && <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />}
+                                {isSubmitting ? 'Creating...' : 'Create Project'}
+                            </button>
                         </div>
                     </form>
                 </div>
