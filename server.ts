@@ -86,14 +86,15 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
 app.post("/api/auth/register", async (req, res) => {
   const { email, name, role, password } = req.body;
+  const normalizedEmail = email.toLowerCase();
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     const stmt = db.prepare("INSERT INTO users (email, name, role, password) VALUES (?, ?, ?, ?)");
-    stmt.run(email.toLowerCase(), name, role, hashedPassword);
-    
-    const token = jwt.sign({ email, name, role }, JWT_SECRET);
-    res.json({ token, user: { email, name, role } });
+    stmt.run(normalizedEmail, name, role, hashedPassword);
+
+    const token = jwt.sign({ email: normalizedEmail, name, role }, JWT_SECRET);
+    res.json({ token, user: { email: normalizedEmail, name, role } });
   } catch (e) {
     res.status(400).json({ error: "User already exists" });
   }
@@ -134,7 +135,7 @@ app.get("/api/projects", authenticateToken, (req: any, res) => {
 
 app.post("/api/projects", authenticateToken, (req: any, res) => {
   const { name, address } = req.body;
-  const ownerEmail = req.user.email;
+  const ownerEmail = req.user.email.toLowerCase();
   const now = new Date().toISOString();
 
   const stmt = db.prepare("INSERT INTO projects (name, address, ownerEmail, sharedWith, created, updated) VALUES (?, ?, ?, ?, ?, ?)");
