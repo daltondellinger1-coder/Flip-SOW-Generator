@@ -18,7 +18,7 @@ const ItemList: React.FC<ItemListProps> = ({ lineItems, onDeleteItem, setEditing
   const [localQuantities, setLocalQuantities] = useState<Record<number, string>>({});
 
   const priceMap = useMemo(() => new Map<string, number>(
-    unitPrices.map(p => [`${p.item}-${p.unit}`, p.price])
+    unitPrices.map(p => [`${p.item}-${p.unit.toLowerCase()}`, p.price])
   ), [unitPrices]);
 
   const handleManualPriceChange = (item: LineItem, value: string) => {
@@ -70,7 +70,7 @@ const ItemList: React.FC<ItemListProps> = ({ lineItems, onDeleteItem, setEditing
           const displayQty = localQuantities[item.id] !== undefined ? localQuantities[item.id] : (item.quantity?.toString() || '0');
           const isLumpSum = item.manualPrice !== undefined;
           
-          const systemUnitPrice = priceMap.get(`${item.item}-${item.unit}`) || 0;
+          const systemUnitPrice = priceMap.get(`${item.item}-${(item.unit || '').toLowerCase()}`) || 0;
 
           return (
             <li key={item.id} className="p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-base-300/50 transition-colors">

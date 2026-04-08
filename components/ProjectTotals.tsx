@@ -18,7 +18,7 @@ const ProjectTotals: React.FC<ProjectTotalsProps> = ({
     onOpenPricing 
 }) => {
   const priceMap = new Map<string, number>(
-      unitPrices.map(p => [`${p.item}-${p.unit}`, p.price] as [string, number])
+      unitPrices.map(p => [`${p.item}-${p.unit.toLowerCase()}`, p.price] as [string, number])
   );
 
   const totals: Record<string, number> = lineItems
@@ -29,7 +29,7 @@ const ProjectTotals: React.FC<ProjectTotalsProps> = ({
     if (item.manualPrice !== undefined) {
         itemTotal = item.manualPrice;
     } else {
-        const basePrice = item.unitPrice !== undefined ? item.unitPrice : (priceMap.get(`${item.item}-${item.unit}`) || 0);
+        const basePrice = item.unitPrice !== undefined ? item.unitPrice : (priceMap.get(`${item.item}-${(item.unit || '').toLowerCase()}`) || 0);
         const scaledPrice = basePrice * costMultiplier;
         itemTotal = (item.quantity || 0) * scaledPrice;
     }
