@@ -68,7 +68,7 @@ const ItemList: React.FC<ItemListProps> = ({ lineItems, onDeleteItem, setEditing
         {lineItems.sort((a,b) => a.id - b.id).map(item => {
           const displayPrice = localPrices[item.id] !== undefined ? localPrices[item.id] : (item.manualPrice?.toString() || '');
           const displayQty = localQuantities[item.id] !== undefined ? localQuantities[item.id] : (item.quantity?.toString() || '0');
-          const isLumpSum = item.manualPrice !== undefined;
+          const isLumpSum = item.manualPrice != null;
           
           const systemUnitPrice = priceMap.get(`${item.item}-${(item.unit || '').toLowerCase()}`) || 0;
 

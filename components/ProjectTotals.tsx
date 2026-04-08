@@ -26,7 +26,7 @@ const ProjectTotals: React.FC<ProjectTotalsProps> = ({
     .reduce((acc, item) => {
     let itemTotal = 0;
     
-    if (item.manualPrice !== undefined) {
+    if (item.manualPrice != null) {
         itemTotal = item.manualPrice;
     } else {
         const basePrice = item.unitPrice !== undefined ? item.unitPrice : (priceMap.get(`${item.item}-${(item.unit || '').toLowerCase()}`) || 0);
