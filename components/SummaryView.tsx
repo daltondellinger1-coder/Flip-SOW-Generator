@@ -44,7 +44,7 @@ const SummaryView: React.FC<SummaryViewProps> = ({
   }, [targetResellValue, contingencyPercentage]);
 
   const priceMap = useMemo(() => new Map<string, number>(
-      unitPrices.map(p => [`${p.item}-${p.unit}`, p.price] as [string, number])
+      unitPrices.map(p => [`${p.item}-${p.unit.toLowerCase()}`, p.price] as [string, number])
   ), [unitPrices]);
 
   const stats = useMemo(() => {
@@ -83,7 +83,7 @@ const SummaryView: React.FC<SummaryViewProps> = ({
 
     visibleItems.forEach(item => {
         let cost = 0;
-        if (item.manualPrice !== undefined) {
+        if (item.manualPrice != null) {
             cost = item.manualPrice;
         } else {
             if (item.quantity === undefined || item.quantity === 0) missingQtyCount++;
@@ -347,8 +347,8 @@ const SummaryView: React.FC<SummaryViewProps> = ({
                         </thead>
                         <tbody>
                             {data.items.map(item => {
-                                const isLumpSum = item.manualPrice !== undefined;
-                                const unitPrice = item.unitPrice !== undefined ? item.unitPrice : (priceMap.get(`${item.item}-${item.unit}`) || 0);
+                                const isLumpSum = item.manualPrice != null;
+                                const unitPrice = item.unitPrice !== undefined ? item.unitPrice : (priceMap.get(`${item.item}-${(item.unit || '').toLowerCase()}`) || 0);
                                 
                                 const scaledPrice = isLumpSum ? unitPrice : (unitPrice * costMultiplier);
                                 const total = isLumpSum ? item.manualPrice! : (item.quantity || 0) * scaledPrice;
