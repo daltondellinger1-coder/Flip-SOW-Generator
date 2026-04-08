@@ -17,6 +17,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "sow-generator-secret-key-123";
 
 // Initialize Database
 const db = new Database("sow_cloud.db");
+db.pragma('foreign_keys = OFF');
 
 // Create Tables
 db.exec(`
@@ -34,8 +35,7 @@ db.exec(`
     ownerEmail TEXT NOT NULL,
     sharedWith TEXT, -- JSON array of emails
     created TEXT NOT NULL,
-    updated TEXT NOT NULL,
-    FOREIGN KEY(ownerEmail) REFERENCES users(email)
+    updated TEXT NOT NULL
   );
 
   CREATE TABLE IF NOT EXISTS line_items (
