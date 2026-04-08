@@ -117,10 +117,10 @@ const RoomDetailView: React.FC<RoomDetailViewProps> = ({
   }, [itemsInRoom]);
 
   const roomTotalCost = useMemo(() => {
-    const priceMap = new Map<string, number>(unitPrices.map(p => [`${p.item}-${p.unit}`, p.price]));
+    const priceMap = new Map<string, number>(unitPrices.map(p => [`${p.item}-${p.unit.toLowerCase()}`, p.price]));
     return tasks.reduce((sum, item) => {
         if (item.manualPrice !== undefined) return sum + item.manualPrice;
-        const price = item.unitPrice !== undefined ? item.unitPrice : (priceMap.get(`${item.item}-${item.unit}`) || 0);
+        const price = item.unitPrice !== undefined ? item.unitPrice : (priceMap.get(`${item.item}-${(item.unit || '').toLowerCase()}`) || 0);
         return sum + (item.quantity || 0) * price;
     }, 0);
   }, [tasks, unitPrices]);
