@@ -121,7 +121,7 @@ export const TRADE_MAP: Record<string, TradeMapEntry> = {
   // ===================================
   // INTERIOR FINISHES
   // ===================================
-  'Install Vinyl Plank Flooring Standard Grade': { trade: 'Flooring', defaultUnit: 'each', defaultAction: 'REPLACE', validRooms: INTERIOR_ROOMS },
+  'Install Vinyl Plank Flooring Standard Grade': { trade: 'Flooring', defaultUnit: 'sf', defaultAction: 'REPLACE', validRooms: INTERIOR_ROOMS },
   'Carpet & Padding (L&M)': { trade: 'Flooring', defaultUnit: 'sf', defaultAction: 'REPLACE', validRooms: BEDROOMS },
   'Paint Interior Walls/Ceilings/ Trim & Doors': { trade: 'Interior Painting', defaultUnit: 'sf', defaultAction: 'PAINT', validRooms: INTERIOR_ROOMS },
   'PVC Baseboard': { trade: 'Interior Woodwork', defaultUnit: 'each', defaultAction: 'REPLACE', validRooms: ALL_ROOMS },

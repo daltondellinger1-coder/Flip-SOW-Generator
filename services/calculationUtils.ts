@@ -78,41 +78,53 @@ export const calculateDimensionBasedQuantity = (
       });
   }
 
-  const itemName = item.trim();
+  const n = item.trim().toLowerCase();
 
-  switch (itemName) {
-    case 'Vinyl Plank':
-    case 'Carpet':
-    case 'Stair Carpeting':
-    case 'Paint Walls':
-    case 'Interior Painting Per Property SF':
-      return Math.round(totalFloorArea);
-    
-    case 'Drywall Wallboard Taped & Finished':
-      return Math.round(totalPerimeter * INTERIOR_WALL_HEIGHT);
-      
-    case 'Paint Doors And Door Trim':
-      return Math.round(totalPerimeter);
-
-    case 'New Kitchen':
-      // If the user changed unit to LF, we scale. If it's still LOT (default), it's handled above.
-      return Math.round(linearFootageOfCabinetry);
-
-    case 'Kitchen Backsplash Tile':
-      return Math.round(linearFootageOfCabinetry * 1.5);
-      
-    case 'Pressure-Treated Deck':
-      return Math.round(totalFloorArea);
-
-    case 'Powerwash Scrape Clean & Prep':
-      const heightForSiding = sidingHeight && sidingHeight > 0 ? sidingHeight : DEFAULT_EXTERIOR_WALL_HEIGHT;
-      return Math.round(totalPerimeter * heightForSiding);
-
-    case 'Asphalt Roofing Architectural':
-      const roofMultiplier = roofPitch && roofPitch > 0 ? getRoofPitchMultiplier(roofPitch) : DEFAULT_ROOF_PITCH_MULTIPLIER;
-      return Math.round((totalFloorArea * roofMultiplier) / 100);
-      
-    default:
-      return undefined;
+  // Floor area items (SF)
+  if (
+    n.includes('vinyl plank') ||
+    n.includes('carpet') ||
+    n.includes('paint interior') ||
+    n.includes('paint walls') ||
+    n.includes('interior painting') ||
+    n.includes('laminate countertop') ||
+    n.includes('pressure-treated deck') ||
+    n.includes('stair carpet')
+  ) {
+    return Math.round(totalFloorArea);
   }
+
+  // Drywall (wall perimeter x height)
+  if (n.includes('drywall') && (n.includes('tape') || n.includes('finish') || n.includes('wallboard'))) {
+    return Math.round(totalPerimeter * INTERIOR_WALL_HEIGHT);
+  }
+
+  // Perimeter items (LF)
+  if (n.includes('baseboard') || n.includes('base 40') || (n.includes('paint') && n.includes('door') && n.includes('trim'))) {
+    return Math.round(totalPerimeter);
+  }
+
+  // Kitchen cabinetry (LF)
+  if (n.includes('cabinetry') || n.includes('cabinet') && n.includes('per lf')) {
+    return Math.round(linearFootageOfCabinetry);
+  }
+
+  // Kitchen backsplash
+  if (n.includes('backsplash')) {
+    return Math.round(linearFootageOfCabinetry * 1.5);
+  }
+
+  // Exterior painting / powerwash (perimeter x height)
+  if (n.includes('powerwash') || (n.includes('scrape') && n.includes('prep'))) {
+    const heightForSiding = sidingHeight && sidingHeight > 0 ? sidingHeight : DEFAULT_EXTERIOR_WALL_HEIGHT;
+    return Math.round(totalPerimeter * heightForSiding);
+  }
+
+  // Roofing (squares)
+  if (n.includes('roofing') && (n.includes('architectural') || n.includes('3 tab') || n.includes('asphalt'))) {
+    const roofMultiplier = roofPitch && roofPitch > 0 ? getRoofPitchMultiplier(roofPitch) : DEFAULT_ROOF_PITCH_MULTIPLIER;
+    return Math.round((totalFloorArea * roofMultiplier) / 100);
+  }
+
+  return undefined;
 };
